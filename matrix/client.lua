@@ -445,7 +445,9 @@ function Client:_sync(options)
 
    for _, kind in ipairs { "join", "invite", "leave" } do
       local handle = self["_sync_handle_room__" .. kind]
-      if response.rooms != nil then
+      if response.rooms == nil then
+          self._log("sync: Error syncing rooms (nil value)")
+      else
           for room_id, room_data in pairs(response.rooms[kind]) do
              self._log("sync: %s %s", kind, room_id)
              -- XXX: Maybe this is abusing pcall() too much to allow handler
@@ -457,8 +459,6 @@ function Client:_sync(options)
                 self._log("sync: Event payload: %s", json.encode(room_data))
              end
           end
-      else
-          self._log("sync: Error syncing rooms (nil value)")
       end
    end
 end
