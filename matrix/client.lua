@@ -228,18 +228,19 @@ function Room:get_alias_or_id()
    end
 end
 
+local make_unimplemented_handler
 local make_unimplemented_handler = function (self, event)
    local env_value = os.getenv("MATRIX_CLIENT_LOG_UNHANDLED_EVENTS")
    if env_value and #env_value > 0 and env_value ~= "0" then
       local function handler(self, event)
          self:_log("unhandled '%s' event: %s", event.type, json.encode(event))
       end
-      local function make_unimplemented_handler(self, event)
+      make_unimplemented_handler = function (self, event)
          return handler
       end
    else
       local function handler(self, event) end
-      local function make_unimplemented_handler(self, event)
+      make_unimplemented_handler = function (self, event)
          self:_log("no handler for '%s' events (this warning is shown only once)", event.type)
          return handler
       end
