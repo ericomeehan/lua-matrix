@@ -445,16 +445,20 @@ function Client:_sync(options)
 
    for _, kind in ipairs { "join", "invite", "leave" } do
       local handle = self["_sync_handle_room__" .. kind]
-      for room_id, room_data in pairs(response.rooms[kind]) do
-         self._log("sync: %s %s", kind, room_id)
-         -- XXX: Maybe this is abusing pcall() too much to allow handler
-         --      code to bail and continue with the next room instead of
-         --      completely failing to sync. Dunno.
-         local ok, err = xpcall(handle, xpcall_add_traceback, self, room_id, room_data)
-         if not ok then
-            self._log("sync: Error handling '%s' event for room %s:\n%s", kind, room_id, err)
-            self._log("sync: Event payload: %s", json.encode(room_data))
-         end
+      if response.rooms != nil then
+          for room_id, room_data in pairs(response.rooms[kind]) do
+             self._log("sync: %s %s", kind, room_id)
+             -- XXX: Maybe this is abusing pcall() too much to allow handler
+             --      code to bail and continue with the next room instead of
+             --      completely failing to sync. Dunno.
+             local ok, err = xpcall(handle, xpcall_add_traceback, self, room_id, room_data)
+             if not ok then
+                self._log("sync: Error handling '%s' event for room %s:\n%s", kind, room_id, err)
+                self._log("sync: Event payload: %s", json.encode(room_data))
+             end
+          end
+      else
+          self._log("sync: Error syncing rooms (nil value)"
       end
    end
 end
