@@ -239,7 +239,7 @@ local make_unimplemented_handler = function (self, event)
       end
    else
       local function handler(self, event) end
-      make_unimplemented_handler = function (self, event)
+      local make_unimplemented_handler = function (self, event)
          self:_log("no handler for '%s' events (this warning is shown only once)", event.type)
          return handler
       end
