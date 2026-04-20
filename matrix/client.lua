@@ -234,7 +234,7 @@ local make_unimplemented_handler = function (self, event)
       local function handler(self, event)
          self:_log("unhandled '%s' event: %s", event.type, json.encode(event))
       end
-      make_unimplemented_handler = function (self, event)
+      local make_unimplemented_handler = function (self, event)
          return handler
       end
    else
