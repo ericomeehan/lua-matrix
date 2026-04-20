@@ -458,7 +458,7 @@ function Client:_sync(options)
              end
           end
       else
-          self._log("sync: Error syncing rooms (nil value)"
+          self._log("sync: Error syncing rooms (nil value)")
       end
    end
 end
