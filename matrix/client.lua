@@ -445,7 +445,7 @@ function Client:_sync(options)
 
    for _, kind in ipairs { "join", "invite", "leave" } do
       local handle = self["_sync_handle_room__" .. kind]
-      if response.rooms == nil then
+      if response.rooms == nil or response.rooms[kind] == nil then
           self._log("sync: Error syncing rooms (nil value)")
       else
           for room_id, room_data in pairs(response.rooms[kind]) do
